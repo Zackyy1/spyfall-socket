@@ -2,32 +2,118 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+
+body {
+  background-color: #292929;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+
+ul {
+  /* max-width: 60vw; */
+  /* width: 100%; */
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns:  2;
+  /* color: white; */
+  color: black;
+  /* font-size: 1.5em; */
+  /* margin-bottom: 20px; */
+  overflow: hidden;
+  /* border-top: 1px solid #ccc;   */
+  /* column-fill: auto; */
+
+}
+
+.players {
+  /* column-count:2; */
+  /* display: flex; */
+  /* justify-content: center; */
+  max-width: 80vw;
+}
+
+.divider {
+  border-top: 2px, grey;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+.player-list li {
+  background: #474747;
+  margin-bottom: 5px;
+  text-align: center;
+  min-height: 30px;
+  font-size: 1.2rem;
+  color: rgb(175, 0, 0);
+  font-weight: bold;
+  /* -webkit-text-stroke: 0.1px black; */
+}
+
+
+.location-list {
+  /* overflow: hidden; */
+  /* display: inline;  */
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-content: center;
+  margin-bottom: 20px;
+}
+
+.navbar {
+  padding-top: 1px;
+  margin-bottom: 30px;
+
+  font-size: 0.7em;
+  background-color: #362222;
+}
+
+.button {
+  background-color: #7c7c7c;
+
+}
+
+.text {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.location-list .location {
+  float: left;
+  justify-content: center;
+  align-content: center;
+
+  width: 46%;
+  /* max-height: 50px;
+  min-height: 50px; */
+  /* white-space: nowrap; */
+  font-size: 0.9em;
+  height: 50px;
+  box-sizing: border-box;
+  background: #474747;
+  color: #ffffff;
+  padding: 10px;
+  /* flex: 1 0 calc(30% - 10px); */
+  margin-left: 10px;
+  margin-top: 10px;
+  /* flex: 1 0 200px; */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+li.selected {
+  background: rgb(77, 77, 77);
 }
+
+.selected {
+  background: rgb(77, 77, 77);
+
+}
+
+li.ready {
+  color: green;
+}
+
+li.ingame {
+  color: white;
+  font-weight: normal;
+
+}
+
+
