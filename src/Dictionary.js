@@ -10,6 +10,11 @@ const dict = {
         "english":"Английский",
         "language":"Язык",
         "or": "или",
+        "location": "Локация",
+        "role": "Роль",
+        "spy": "Шпион",
+
+
   
     },
     'english': {
@@ -23,6 +28,9 @@ const dict = {
         "english":"English",
         "language":"Language",
         "or": "or",
+        "location": "Location",
+        "role": "Role",
+        "spy": "Spy",
   
     }
 }

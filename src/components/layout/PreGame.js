@@ -42,6 +42,11 @@ export class PreGame extends Component {
 
     }
 
+    componentWillUnmount() {
+      socket.off("room"+this.state.roomCode);
+    }
+    
+
     dict(word) {
         let from = dict.russian // change to english at production
         if (this.state.language === "Russian") {

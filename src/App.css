@@ -45,15 +45,16 @@ ul {
   text-align: center;
   min-height: 30px;
   font-size: 1.2rem;
-  color: rgb(175, 0, 0);
+  color: rgb(201, 93, 93);
   font-weight: bold;
-  /* -webkit-text-stroke: 0.1px black; */
 }
 
+.big-text {
+  font-size: 1.4em;
+}
 
 .location-list {
-  /* overflow: hidden; */
-  /* display: inline;  */
+
   justify-content: center;
   align-content: center;
   margin-bottom: 20px;
@@ -69,6 +70,14 @@ ul {
 
 .button {
   background-color: #7c7c7c;
+}
+
+.btn:active {
+  /* background-color: #7e4343; */
+}
+
+.btn:focus {
+  background-color: #7e4343;
 
 }
 
@@ -82,19 +91,14 @@ ul {
   align-content: center;
 
   width: 46%;
-  /* max-height: 50px;
-  min-height: 50px; */
-  /* white-space: nowrap; */
   font-size: 0.9em;
   height: 50px;
   box-sizing: border-box;
   background: #474747;
   color: #ffffff;
   padding: 10px;
-  /* flex: 1 0 calc(30% - 10px); */
   margin-left: 10px;
   margin-top: 10px;
-  /* flex: 1 0 200px; */
 }
 
 li.selected {

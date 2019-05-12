@@ -7,6 +7,7 @@ import socketIOClient from "socket.io-client";
 import $ from 'jquery'
 import Locations from '../../Locations'
 import LocationsRus from '../../LocationsRus'
+import dict from '../../Dictionary'
 
 import PreGame from './PreGame'
 const socket = socketIOClient("http://127.0.0.1:4001");
@@ -50,6 +51,19 @@ export class Game extends Component {
             }
         }
 
+        showOneLocation(index) {
+            let toreturn = "";
+            if (this.state.language == "Russian") {
+                toreturn = LocationsRus.locationsRus[index].roles[LocationsRus.locationsRus[index].roles.length * Math.random() | 0];
+                console.log("Location:", LocationsRus.locationsRus[index].title, "Role:",toreturn)
+            return ( {location: LocationsRus.locationsRus[index].title, role: toreturn} )
+                } else if (this.state.language == "English") {
+                    toreturn = Locations.locations[index].roles[Locations.locations[index].roles.length * Math.random() | 0];
+                    console.log("Location:", Locations.locations[index].title, "Role:",toreturn)
+                    return ( {location: Locations.locations[index].title, role: toreturn} )
+            }
+        }
+
     makePlayerList = () => {
         this.state.room && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
             $("#"+player).addClass("ingame");
@@ -60,10 +74,47 @@ export class Game extends Component {
         
         }
 
+        dict(word) {
+            let from = dict.russian // change to english at production
+            if (this.state.language === "Russian") {
+              from = dict.russian;
+            } else {
+              from = dict.english;
+            }
+            return from[word];
+          }
+
+    
+
+    checkMyRole = () => {
+        if (this.state.room && this.state.room.notSpies.indexOf(this.state.name) > -1) {
+            console.log("This player is not a spy, giving him a random role");
+            let index = this.state.room.locationIndex;
+            let loc = this.showOneLocation(index)
+            return (
+                <div>
+                    <p key={index} className="text">{this.dict("location")}: {loc.location}</p>
+                    <p key={index+1} className="text">{this.dict("role")}: {loc.role}</p>
+
+                </div>
+            )
+            
+        } else {
+            return (
+                <div>
+                    <p key={Math.random()*100} className="text">{this.dict("location")}: ???</p>
+                    <p key={Math.random()*100} className="text">{this.dict("role")}: {this.dict("spy")}</p>
+
+                </div>
+            )
+        }
+    }
+
 
   render() {
     return (
       <div>
+          {this.checkMyRole()}
         <div className="container players center" id="">
             <ul className="player-list center">
                 {this.makePlayerList()}
