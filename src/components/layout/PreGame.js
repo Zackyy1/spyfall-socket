@@ -7,22 +7,26 @@ import dict from '../../Dictionary'
 const socket = socketIOClient("http://127.0.0.1:4001");
 
 export class PreGame extends Component {
-    state = {
-        roomCode: window.location.pathname.slice(2+window.location.pathname.slice(1).search("/")),
-        name: this.props.location.state.name,
-        language: this.props.location.state.language,
-    }
+  
+  state = {
+    roomCode: window.location.pathname.slice(2+window.location.pathname.slice(1).search("/")),
+    name: this.props.location.state.name,
+    language: this.props.location.state.language,
+    timeLimit: "07:00",
+}
+    
 
     componentDidMount() {
 
-        $("ul").on("click", function(event){
-            if (event.target.classList.contains('selected')) {
-                event.target.classList.remove("selected");
+        // $(".player-item").on("click", function(event){
+        //     if (event.target.classList.contains('selected')) {
+        //         event.target.classList.remove("selected");
 
-            } else {
-            event.target.classList.add('selected')
-            }
-        });
+        //     } else {
+        //     event.target.classList.add('selected')
+        //     }
+        // });
+
         $("#readyButton").click(function(){
             $(this).remove();
         });
@@ -62,8 +66,13 @@ export class PreGame extends Component {
     this.state.room && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
         $("#"+player).addClass("ready");
     })
+
+    if (this.state.room && this.state.room.readyPlayers.indexOf(this.state.name) > -1) {
+      $("#readyButton").remove();
+    }
+    
     return this.state.room ? this.state.room.players.map(player => (
-        <li className="player-item" key={player.toString()} id={player}>{player}</li> 
+        <div className="player" key={player.toString()} id={player}>{player}</div> 
     )) : <Loader />
     
     }
@@ -71,8 +80,29 @@ export class PreGame extends Component {
     handleReady = e => {
         console.log(this.state.name, 'is now ready', $("#"+this.state.name));
         $("#"+this.state.name).addClass("ready");
+        if (this.state.room && this.state.name === this.state.room.host) {
+          $("#hostTimer").remove()
+          socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
+        }
         socket.emit("playerReady", {roomCode: this.state.roomCode, name: this.state.name})
     }
+
+    hostTimer = () => {
+      if (this.state.room && this.state.name === this.state.room.host) {
+          return (
+            <div id="hostTimer">
+            <label htmlFor="timeLimit" className="text">{this.dict('choosetime')}</label>
+            <input type="time" className="time text center" onChange={this.handleTimeChange} defaultValue="07:00"/>
+            </div>
+            )
+      }
+  }
+
+  handleTimeChange = e => {
+    console.log("New time:", e.target.value)
+    this.setState({timeLimit: e.target.value});
+
+  }
     
 
   render() {
@@ -81,11 +111,13 @@ export class PreGame extends Component {
           
         <h5 style={{paddingBottom: "15px"}} className="text">{this.dict("roomCode")}{this.state.roomCode}</h5>
         <div className="container players center" id="">
-            <ul className="player-list center">
+            <div className="player-list center">
                 {this.makePlayerList()}
-            </ul>
+            </div>
+            {this.hostTimer()}
+            <button style={{marginTop: "15vh"}} className="btn btn-large button" id="readyButton" onClick={() => this.handleReady()}>{this.dict("ready")}</button>
+
         </div>
-        <button style={{marginTop: "15vh"}} className="btn btn-large button" id="readyButton" onClick={() => this.handleReady()}>{this.dict("ready")}</button>
         
       </div>
     )

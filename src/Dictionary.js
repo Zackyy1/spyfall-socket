@@ -13,7 +13,10 @@ const dict = {
         "location": "Локация",
         "role": "Роль",
         "spy": "Шпион",
-
+        "finish": "Завершить",
+        "choosetime": "Ограничение по времени",
+        "timesUp": "Время вышло!",
+        "timeRemaining": "Осталось времени",
 
   
     },
@@ -31,6 +34,10 @@ const dict = {
         "location": "Location",
         "role": "Role",
         "spy": "Spy",
+        "finish": "Finish",
+        "choosetime": "Choose time limit",
+        "timesUp": "Time's up",
+        "timeRemaining": "Time remaining",
   
     }
 }

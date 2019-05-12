@@ -88,15 +88,7 @@ export class StartScreen extends Component {
             <input type="text" id="name" className="center text" onChange={this.handleChange}/>
           </div>
          
-          <div className="dropdown">
-  <button className="btn button dropdown-toggle big-text" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  {this.dict("language")}
-  </button>
-  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a className="dropdown-item big-text" onClick={() => this.langRus()}>{this.dict("russian")}</a>
-    <a className="dropdown-item big-text" onClick={() => this.langEng()}>{this.dict("english")}</a>
-  </div>
-</div>
+          
 
           <div style={{paddingTop: "15px"}}>
             <button className="btn button big-text" onClick={() => this.handleCreateGame()}>{this.dict("createGame")}</button>
@@ -110,6 +102,15 @@ export class StartScreen extends Component {
           </div>
         </form>
         </div>
+        <div className="dropdown" style={{marginTop: "50px"}}>
+  <button className="btn button dropdown-toggle big-text" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  {this.dict("language")}
+  </button>
+  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a className="dropdown-item big-text" onClick={() => this.langRus()}>{this.dict("russian")}</a>
+    <a className="dropdown-item big-text" onClick={() => this.langEng()}>{this.dict("english")}</a>
+  </div>
+</div>
       </div>
     )
   }

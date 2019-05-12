@@ -33,13 +33,29 @@ ul {
 }
 
 .divider {
-  border-top: 2px, grey;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  /* border-style: solid; */
+  background-color: #29292900;
+  border-bottom: 2px, grey;
+  padding-top: 15px;
+  /* margin-top: 10px; */
+  /* min-height: 1px; */
+  /* margin-bottom: 10px; */
+  /* position: inherit; */
+  /* display: inline; */
 }
 
 
-.player-list li {
+.player-list .player-item {
+  background: #474747;
+  margin-bottom: 5px;
+  text-align: center;
+  min-height: 30px;
+  font-size: 1.2rem;
+  color: rgb(201, 93, 93);
+  font-weight: bold;
+}
+
+.player-list .player {
   background: #474747;
   margin-bottom: 5px;
   text-align: center;
@@ -58,6 +74,13 @@ ul {
   justify-content: center;
   align-content: center;
   margin-bottom: 20px;
+}
+.player-list {
+
+  justify-content: center;
+  align-content: center;
+  margin-bottom: 20px;
+  
 }
 
 .navbar {
@@ -101,20 +124,42 @@ ul {
   margin-top: 10px;
 }
 
-li.selected {
-  background: rgb(77, 77, 77);
+.player-list .player-item {
+  float: left;
+  /* justify-content: center;
+  align-content: center; */
+
+  width: 46%;
+  font-size: 0.9em;
+  height: 40px;
+  /* box-sizing: border-box; */
+  background: #646464;
+  color: #ffffff;
+  padding: 10px;
+  margin-left: 10px;
+  /* margin-top: 10px; */
 }
 
 .selected {
   background: rgb(77, 77, 77);
+}
+
+.selected {
+  background-color: #424242;
+  background: #424242;
+
+  text-decoration: line-through;
+  text-decoration-color: black;
+  text-decoration-style: double;
+  
 
 }
 
-li.ready {
+.player.ready {
   color: green;
 }
 
-li.ingame {
+.ingame {
   color: white;
   font-weight: normal;
 
