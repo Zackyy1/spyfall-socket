@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import io from 'socket.io-client'
+
+const socket = io();
+
+socket.on("gameCreate", e => {
+    alert("Yahoo")
+  }); 
+  
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
