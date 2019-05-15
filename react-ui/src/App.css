@@ -2,31 +2,167 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+
+body {
+  background-color: #292929;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+
+ul {
+  /* max-width: 60vw; */
+  /* width: 100%; */
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns:  2;
+  /* color: white; */
+  color: black;
+  /* font-size: 1.5em; */
+  /* margin-bottom: 20px; */
+  overflow: hidden;
+  /* border-top: 1px solid #ccc;   */
+  /* column-fill: auto; */
+
+}
+
+.players {
+  /* column-count:2; */
+  /* display: flex; */
+  /* justify-content: center; */
+  max-width: 80vw;
+}
+
+.divider {
+  /* border-style: solid; */
+  background-color: #29292900;
+  border-bottom: 2px, grey;
+  padding-top: 15px;
+  /* margin-top: 10px; */
+  /* min-height: 1px; */
+  /* margin-bottom: 10px; */
+  /* position: inherit; */
+  /* display: inline; */
+}
+
+
+.player-list .player-item {
+  background: #474747;
+  margin-bottom: 5px;
+  text-align: center;
+  min-height: 30px;
+  font-size: 1.2rem;
+  color: rgb(201, 93, 93);
+  font-weight: bold;
+}
+
+.player-list .player {
+  background: #474747;
+  margin-bottom: 5px;
+  text-align: center;
+  min-height: 30px;
+  font-size: 1.2rem;
+  color: rgb(201, 93, 93);
+  font-weight: bold;
+}
+
+.big-text {
+  font-size: 1.4em;
+}
+
+.location-list {
+
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-content: center;
+  margin-bottom: 20px;
+}
+.player-list {
+
+  justify-content: center;
+  align-content: center;
+  margin-bottom: 20px;
+  
+}
+
+.navbar {
+  padding-top: 1px;
+  margin-bottom: 30px;
+
+  font-size: 0.7em;
+  background-color: #362222;
+}
+
+.button {
+  background-color: #7c7c7c;
+}
+
+.btn:active {
+  /* background-color: #7e4343; */
+}
+
+.btn:focus {
+  background-color: #7e4343;
+
+}
+
+.text {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.location-list .location {
+  float: left;
+  justify-content: center;
+  align-content: center;
+
+  width: 46%;
+  font-size: 0.9em;
+  height: 50px;
+  box-sizing: border-box;
+  background: #474747;
+  color: #ffffff;
+  padding: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.player-list .player-item {
+  float: left;
+  /* justify-content: center;
+  align-content: center; */
+
+  width: 46%;
+  font-size: 0.9em;
+  height: 40px;
+  /* box-sizing: border-box; */
+  background: #646464;
+  color: #ffffff;
+  padding: 10px;
+  margin-left: 10px;
+  /* margin-top: 10px; */
 }
+
+.selected {
+  background: rgb(77, 77, 77);
+}
+
+.selected {
+  background-color: #424242;
+  background: #424242;
+
+  text-decoration: line-through;
+  text-decoration-color: black;
+  text-decoration-style: double;
+  
+
+}
+
+.player.ready {
+  color: green;
+}
+
+.ingame {
+  color: white;
+  font-weight: normal;
+
+}
+
+

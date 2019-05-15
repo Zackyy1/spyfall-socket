@@ -6,7 +6,7 @@
     "node": "10.x"
   },
   "scripts": {
-    "start": "node server",
+    "start": "node server/index.js",
     "build": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
@@ -14,7 +14,13 @@
     "react-ui/node_modules"
   ],
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "express-ws": "^4.0.0",
+    "file-system": "^2.2.2",
+    "firebase": "^6.0.2",
+    "firebase-admin": "^7.3.0",
+    "firebase-tools": "^6.9.2",
+    "socket.io": "^2.2.0"
   },
   "repository": {
     "type": "git",

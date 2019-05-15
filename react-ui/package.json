@@ -3,9 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bufferutil": "4.0.1",
+    "engine.io": "^3.3.2",
+    "express": "^4.16.4",
+    "express-ws": "^4.0.0",
+    "file-system": "^2.2.2",
+    "firebase": "^6.0.2",
+    "firebase-admin": "^7.3.0",
+    "firebase-tools": "^6.9.2",
+    "fs": "0.0.1-security",
+    "jquery": "^3.4.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "^2.1.8"
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.1",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "utf-8-validate": "5.0.2",
+    "uws": "^100.0.1",
+    "ws": "^7.0.0",
+    "nodemon": "^1.19.0"
   },
   "scripts": {
     "start": "react-scripts start",
