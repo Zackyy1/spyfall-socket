@@ -16,17 +16,17 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-app.use(express.static(path.join(__dirname, '../../build/react-ui')));
+app.use(express.static(path.join(__dirname, '../react-ui/build')));
 if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../build/react-ui')));
+    app.use(express.static(path.join(__dirname, '../react-ui/build')));
     //
     app.get('/*', (req, res) => {
-      res.sendFile(path.join(__dirname+'../../build/react-ui/index.html'));
+      res.sendFile(path.join(__dirname+'../react-ui/build/index.html'));
     })
   }
   //build mode
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname+'../../react-ui/public/index.html'));
+    res.sendFile(path.join(__dirname+'../react-ui/public/index.html'));
   })
 
   
