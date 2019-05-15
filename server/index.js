@@ -1,7 +1,7 @@
-const express = require("../../node_modules/express");
+const express = require("express"); //../../node_modules/
 const app = express();
 const server = require("http").Server(app);
-const io = module.exports.io = require('../../node_modules/socket.io/lib')(server)
+const io = module.exports.io = require('socket.io/lib')(server) //../../node_modules/
 const path = require("path")
 
 const port = process.env.PORT || 4001; // 80? 443?
