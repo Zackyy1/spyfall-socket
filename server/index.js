@@ -16,10 +16,10 @@ var allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
-app.use(express.static(path.join(__dirname, '../../build')));
+app.use(express.static(path.join(__dirname, '../../build/react-ui')));
 if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../build')));
-    console.log("DEBUG HERE", __dirname, path.join(__dirname+'../../build'));
+    app.use(express.static(path.join(__dirname, '../../build/react-ui')));
+    console.log("DEBUG HERE", __dirname, path.join(__dirname+'../../build/react-ui'));
     //
     app.get('/*', (req, res) => {
       res.sendFile(path.join(__dirname+'../../build/index.html'));
