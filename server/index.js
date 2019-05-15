@@ -19,15 +19,14 @@ app.use(allowCrossDomain);
 app.use(express.static(path.join(__dirname, '../../build/react-ui')));
 if(process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../../build/react-ui')));
-    console.log("DEBUG HERE", __dirname, path.join(__dirname+'../../build/react-ui'));
     //
     app.get('/*', (req, res) => {
-      res.sendFile(path.join(__dirname+'../../build/index.html'));
+      res.sendFile(path.join(__dirname+'../../build/react-ui/index.html'));
     })
   }
   //build mode
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname+'../../public/index.html'));
+    res.sendFile(path.join(__dirname+'../../react-ui/public/index.html'));
   })
 
   
