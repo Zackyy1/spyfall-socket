@@ -7,6 +7,13 @@ body {
   background-color: #292929;
 }
 
+body {
+  
+  background-image: linear-gradient( rgba(1, 0, 0, 0.85), rgba(1, 0, 0, 0.85) ), url('./images/repeating.jpg');
+  background-repeat: repeat;
+  background-size: 250px;
+}
+
 
 
 ul {
@@ -29,14 +36,15 @@ ul {
   /* column-count:2; */
   /* display: flex; */
   /* justify-content: center; */
-  max-width: 80vw;
+  /* max-width: 80vw; */
+  /* min-height: 50vh; */
 }
 
 .divider {
   /* border-style: solid; */
   background-color: #29292900;
-  border-bottom: 2px, grey;
-  padding-top: 15px;
+  border-bottom: 5px, grey;
+  padding-top: 30px;
   /* margin-top: 10px; */
   /* min-height: 1px; */
   /* margin-bottom: 10px; */
@@ -45,7 +53,7 @@ ul {
 }
 
 
-.player-list .player-item {
+/* .player-list .player-item {
   background: #474747;
   margin-bottom: 5px;
   text-align: center;
@@ -53,17 +61,17 @@ ul {
   font-size: 1.2rem;
   color: rgb(201, 93, 93);
   font-weight: bold;
-}
+} */
 
-.player-list .player {
-  background: #474747;
+/* .player-list .player {
+  background: #47474700;
   margin-bottom: 5px;
   text-align: center;
   min-height: 30px;
   font-size: 1.2rem;
   color: rgb(201, 93, 93);
   font-weight: bold;
-}
+} */
 
 .big-text {
   font-size: 1.4em;
@@ -79,16 +87,16 @@ ul {
 
   justify-content: center;
   align-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   
 }
 
 .navbar {
   padding-top: 1px;
   margin-bottom: 30px;
-
+  /* background-image: , url('./images/repeating.jpg'); */
   font-size: 0.7em;
-  background-color: #362222;
+  background-image: linear-gradient( #463434, #331111 );
 }
 
 .button {
@@ -96,16 +104,26 @@ ul {
 }
 
 .btn:active {
-  /* background-color: #7e4343; */
+  background-color: #7e4343;
 }
 
 .btn:focus {
   background-color: #7e4343;
-
 }
+
+.btn:disabled {
+  background-color: #7e4343;
+}
+
 
 .text {
   color: white;
+}
+
+#finishButton {
+  
+
+  margin-bottom: 25px;
 }
 
 .location-list .location {
@@ -116,33 +134,33 @@ ul {
   font-size: 0.9em;
   height: 50px;
   box-sizing: border-box;
-  background: #474747;
+  background: #1b1b1bc5;
   color: #ffffff;
   padding: 10px;
   margin-left: 10px;
   margin-top: 10px;
 }
 
-.player-list .player-item {
+.player-list .player {
   float: left;
-  /* justify-content: center;
-  align-content: center; */
-
+  justify-content: center;
+  align-content: center;
   width: 46%;
-  font-size: 0.9em;
+  /* font-size: 0.9em; */
   height: 40px;
-  /* box-sizing: border-box; */
-  background: #646464;
+  box-sizing: border-box;
+  background: #161616e5;
   color: #ffffff;
   padding: 10px;
   margin-left: 10px;
+  font-size: 1.2rem;
   /* margin-top: 10px; */
 }
 
 
 .selected {
-  background-color: #424242;
-  background: #424242;
+  background-color: #42424232;
+  background: #42424232;
 
   text-decoration: line-through;
   text-decoration-color: black;

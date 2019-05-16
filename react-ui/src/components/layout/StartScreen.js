@@ -84,7 +84,7 @@ export class StartScreen extends Component {
 
   render() {
     return (
-      <div className="center">
+      <div className="center repeating">
         <div className="container" style={{paddingTop: "25px"}}>
         <form onSubmit={this.handleSubmit}>
           <div>

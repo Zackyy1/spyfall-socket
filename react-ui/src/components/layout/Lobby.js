@@ -47,26 +47,8 @@ export class Lobby extends Component {
     
     componentDidMount() {
 
-        console.log("I mounted", $(".location"))
-        $(".location").click( e => {
-                if (e.target.classList.contains('selected')) {
-                    e.target.classList.remove("selected");
-    
-                } else {
-                e.target.classList.add('selected')
-                console.log("Added class selected")
-                }
-        });
-        $(".player-item").on("click", function(event){
-            console.log("Clicked")
-            if (event.target.classList.contains('selected')) {
-                event.target.classList.remove("selected");
-
-            } else {
-            event.target.classList.add('selected')
-            }
-        });
-  
+        
+        
 
         // this.setState({timeLimit: $("#timer").value})
         
@@ -99,10 +81,30 @@ export class Lobby extends Component {
                 }
 
             }
-            this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
+            this.state.room.readyPlayerCount > 0 && this.state.room.isStarted == false && this.state.room.readyPlayers.map(player => {
                 $("#"+player).addClass("ready");
             })
         }
+
+        $(".location").click( e => {
+            if (e.target.classList.contains('selected')) {
+                e.target.classList.remove("selected");
+
+            } else {
+            e.target.classList.add('selected')
+            console.log("Added class selected")
+            }
+    });
+    $(".player").on("click", function(event){
+        console.log("Clicked")
+        if (event.target.classList.contains('selected')) {
+            event.target.classList.remove("selected");
+
+        } else {
+        event.target.classList.add('selected')
+        }
+    });
+
 
     }
     
@@ -137,7 +139,7 @@ export class Lobby extends Component {
     hostButton = () => {
         if (this.state.room && this.state.name === this.state.room.host) {
             return (
-                <button className="btn button btn-large red" onClick={() => this.handleFinish()}>{this.dict("finish")}</button>
+                <button className="btn button btn-large red" id="finishButton" onClick={() => this.handleFinish()}>{this.dict("finish")}</button>
             )
         }
     }
@@ -174,6 +176,9 @@ export class Lobby extends Component {
 
   
             if (this.state.room) {
+                for (let i = 0; i < this.state.room.players.length; i++) {
+                    $("#"+this.state.room.players[i]).removeClass("ready");
+                }
                 let notSpies = Object.keys(this.state.room.notSpies);
                 // console.log("CHECKING FOR NAME IN NOTSPIES", notSpies, ("Rick" in notSpies))
                 // console.log("TEST", )
@@ -279,7 +284,7 @@ export class Lobby extends Component {
     }
 
     makePlayerList = () => {
-    this.state.room && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
+    this.state.room && this.state.room.isStarted == false && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
         $("#"+player).addClass("ready");
     })
 
@@ -362,12 +367,12 @@ export class Lobby extends Component {
             
                 {this.checkMyRole()}
                 {this.timer()}
-              <div className="container">
-                  <div className="player-list">
+             
+                  <div className="player-list container">
                       {this.makePlayerList()}
                   </div>
                   
-              </div>
+             
       
               <div className="divider container"></div>
               <div>
