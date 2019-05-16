@@ -74,8 +74,12 @@ export class Lobby extends Component {
             $("#"+player).addClass("ready");
         });
 
-        console.log(this.state);
+        // if (this.state.room && this.state.name in this.state.room.readyPlayers && this.state.name == this.state.room.host) {
+        //     console.log("Removing input for a ready host")
+        //     $("#timerInput").remove();
+        // }
 
+       
 
         socket.emit("requestRoomInfo", this.state.roomCode);
         // 
@@ -85,6 +89,23 @@ export class Lobby extends Component {
         
    
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.room) {
+            for (let i = 0; i < this.state.room.readyPlayers.length; i++) {
+                if (this.state.name === this.state.room.readyPlayers[i]) {
+                    $("#hostTimer").remove();
+                    $("#readyButton").remove();
+                }
+
+            }
+            this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
+                $("#"+player).addClass("ready");
+            })
+        }
+
+    }
+    
 
     
     
@@ -262,9 +283,9 @@ export class Lobby extends Component {
         $("#"+player).addClass("ready");
     })
 
-    if (this.state.room && this.state.room.readyPlayers.indexOf(this.state.name) > -1) {
-      $("#readyButton").remove();
-    }
+    // if (this.state.room && this.state.room.readyPlayers.indexOf(this.state.name) > -1) {
+    //   $("#readyButton").remove();
+    // }
 
     // console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit, localStorage.getItem('localTimer'))
 
