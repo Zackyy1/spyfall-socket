@@ -348,14 +348,17 @@ export class Lobby extends Component {
 
           return (
         <div className="center">
-        <div>
+        <div className="center">
           
         <h5 style={{paddingBottom: "15px"}} className="text">{this.dict("roomCode")}{this.state.roomCode}</h5>
         <div className="container players center" id="">
             <div className="player-list center">
                 {this.makePlayerList()}
             </div>
-            {this.hostTimer()}
+            <div style={{paddingTop: "80px"}} className="container">
+                {this.hostTimer()}
+
+            </div>
             <button style={{marginTop: "15vh"}} className="btn btn-large button" id="readyButton" onClick={() => this.handleReady()}>{this.dict("ready")}</button>
         </div>
       </div>
