@@ -355,7 +355,7 @@ export class Lobby extends Component {
             <div className="player-list center">
                 {this.makePlayerList()}
             </div>
-            <div style={{paddingTop: "80px"}} className="container">
+            <div style={{paddingTop: "30vh"}} className="container">
                 {this.hostTimer()}
 
             </div>
