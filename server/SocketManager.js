@@ -92,12 +92,30 @@ const onGoingTimers = [];
                   }
                   var newPopulation = sfDoc.data().readyPlayerCount + 1;
                   var newPlayers = [...sfDoc.data().readyPlayers, name];
+                  let fromStart = {
+                    readyPlayers: newPlayers,
+                    readyPlayerCount: newPopulation,
+                    isStarted: false, 
+                    spy: "", 
+                    notSpies: [], 
+                    location: "",
+                    locationIndex: 0,}
                   if (sfDoc.data().playerCount == newPopulation) {
-                    io.emit("startGame"+roomCode, {})
-                    startOrStopGame(socket, roomCode);
+                    // io.emit("startGame"+roomCode, {})
+                    fromStart = startGame(sfDoc.data());
+                    console.log(fromStart)
                     console.log("All players ready, starting game")
                   }
-                  transaction.update(db.collection("rooms").doc(roomCode), { readyPlayerCount: sfDoc.data().readyPlayerCount + 1, readyPlayers: newPlayers });
+                  transaction.update(db.collection("rooms").doc(roomCode), { 
+                    readyPlayerCount: newPopulation,
+                    readyPlayers: newPlayers,
+                    isStarted: fromStart.isStarted, 
+                    spy: fromStart.spy, 
+                    notSpies: fromStart.notSpies, 
+                    location: fromStart.location,
+                    locationIndex: fromStart.locationIndex,
+                    
+                  });
               });
           }).then(function() {
               getRoomFromCode(socket, roomCode)
@@ -107,14 +125,34 @@ const onGoingTimers = [];
           });
           }
         
-          const startOrStopGame = (socket, roomCode) => {
-          
+          const finishGame = (socket, roomCode) => {
             return db.runTransaction(function(transaction) {
               return transaction.get(db.collection("rooms").doc(roomCode)).then(function(sfDoc) {
                   if (!sfDoc.exists) {
                       throw "Document does not exist!";
                   }
-                  let doc = sfDoc.data();
+                  
+                  transaction.update(db.collection("rooms").doc(roomCode), { 
+                    readyPlayerCount: 0,
+                    readyPlayers: [],
+                    isStarted: false, 
+                    
+                    
+                  });
+              });
+          }).then(function() {
+              getRoomFromCode(socket, roomCode)
+              console.log("Transaction READY successfully committed!");
+          }).catch(function(error) {
+              console.log("Transaction failed: ", error);
+          });
+          }
+
+
+          const startGame = (data) => {
+          
+           
+                  let doc = data;
                   let newState = true;
                   // let players = doc.players;
                   let spy = "";
@@ -142,28 +180,12 @@ const onGoingTimers = [];
                   }
                   delete notSpies[spy];
                 };
-        
-                transaction.update(db.collection("rooms").doc(roomCode), { 
+                return {
                   isStarted: newState, 
                   spy, 
                   notSpies, 
                   location,
-                  locationIndex,
-                  readyPlayerCount: 0,
-                  readyPlayers: [],
-                  // localTimer: timerValue,
-                });
-        
-        
-              });
-
-          }).then(function() {
-              getRoomFromCode(socket, roomCode)
-           
-              console.log("Transaction START GAME successfully committed!");
-          }).catch(function(error) {
-              console.log("Transaction failed: ", error);
-          });
+                  locationIndex,}
           }
         
           const setTimeLimitForRoom = (socket, roomCode, timeLimit) => {
@@ -173,12 +195,12 @@ const onGoingTimers = [];
                       throw "Document does not exist!";
                   }
                   let doc = sfDoc.data();
-                  let newTime = timeLimit || "07:00";
+                  let newTime = timeLimit;
                   console.log("Trying to push new time:", newTime)
-        
+                  console.log(sfDoc.data());
                 transaction.update(db.collection("rooms").doc(roomCode), { 
                   timeLimit: newTime
-                });
+                })
         
         
               });
@@ -215,7 +237,7 @@ module.exports = function(socket){
       })
     
       socket.on("finish", roomCode => {
-        startOrStopGame(socket, roomCode);
+        finishGame(socket, roomCode);
       })
     
       socket.on("timeChange", data => {

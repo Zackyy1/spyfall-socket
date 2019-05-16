@@ -13,7 +13,6 @@ import server from '../../config/serverConfig'
 const socket = socketIOClient(server);
 
 let ongoingtimer;
-let k = "07:00";
 export class Lobby extends Component {
 
     
@@ -69,11 +68,13 @@ export class Lobby extends Component {
         });
   
 
-        this.setState({timeLimit: $("#timer").value})
+        // this.setState({timeLimit: $("#timer").value})
         
         this.state.room && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
             $("#"+player).addClass("ready");
         });
+
+        console.log(this.state);
 
 
         socket.emit("requestRoomInfo", this.state.roomCode);
@@ -90,7 +91,7 @@ export class Lobby extends Component {
     changeTime = (newTime) => {
         this.setState({
           localTimer: newTime,
-          timeLimit: newTime,
+        //   timeLimit: newTime,
         },() => {
           localStorage.setItem('localTimer', JSON.stringify(newTime))
         });
@@ -152,8 +153,11 @@ export class Lobby extends Component {
     
 
     checkMyRole = () => {
+
+
   
             if (this.state.room) {
+                console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit)
                 let notSpies = Object.keys(this.state.room.notSpies);
                 // console.log("CHECKING FOR NAME IN NOTSPIES", notSpies, ("Rick" in notSpies))
                 // console.log("TEST", )
@@ -241,11 +245,11 @@ export class Lobby extends Component {
 
     timer () {
         // Timer code goes here
-        if (this.state.room && this.state.room.localTimer && this.state.room.isStarted) {
+        if (this.state.room && this.state.room.isStarted) {
 
-        if (this.state.localTimer == undefined) {
-            this.setState({localTimer: this.state.room.timeLimit})
-        }
+        // if (this.state.localTimer == undefined) {
+        //     this.setState({localTimer: this.state.room.timeLimit})
+        // }
 
             this.startTimer(this.state.localTimer)
             return (
@@ -278,7 +282,7 @@ export class Lobby extends Component {
         }
         if (this.state.room) {
             this.changeTime(this.state.room.timeLimit)
-            console.log("TIMER RESET")
+            console.log("TIMER RESET TO", this.state.timeLimit)
         }
         socket.emit("playerReady", {roomCode: this.state.roomCode, name: this.state.name})
 
@@ -287,11 +291,12 @@ export class Lobby extends Component {
     hostTimer = () => {
       if (this.state.room && this.state.name === this.state.room.host) {
           // clear storage
+          socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: $("#timerInput").value})
 
           return (
             <div id="hostTimer">
             <label htmlFor="timeLimit" className="text">{this.dict('choosetime')}</label>
-            <input type="time" className="time text center" onChange={this.handleTimeChange} defaultValue="07:00"/>
+            <input type="time" className="time text center" id="timerInput" onChange={this.handleTimeChange} defaultValue="07:00"/>
             </div>
             )
       }
@@ -299,8 +304,9 @@ export class Lobby extends Component {
 
   handleTimeChange = e => {
     console.log("New time:", e.target.value)
-    this.setState({timeLimit: e.target.value});
+    this.setState({timeLimit: e.target.value, localTimer: e.target.value});
     this.changeTime(e.target.value);
+    // socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
 
   }
     
