@@ -12,7 +12,7 @@ const locations = JSON.parse(locs).locations
 ########## CONFIG VARIABLES ###########
 
 */
-const allowTimer = false;
+const lol = "its nothing here"
 /*
 
 ########## CONFIG VARIABLES ###########
@@ -44,43 +44,7 @@ const onGoingTimers = [];
               })
           }
 
-          const startTimer = (socket, roomCode, duration) => {
-              let timer = duration, minutes, seconds;
-                console.log("tried starting a new timer for", roomCode)
-                console.log("Here's onGoingTimers", onGoingTimers);
-                let ongoingtimer = setInterval(function () {
-                  
-                  // console.log("Timer going for", roomCode, roomCode in onGoingTimers);
-                    // if (roomCode in onGoingTimers) {
-                 
-                  minutes = parseInt(timer / 60, 10)
-                  seconds = parseInt(timer % 60, 10);
           
-                  minutes = minutes < 10 ? "0" + minutes : minutes;
-                  seconds = seconds < 10 ? "0" + seconds : seconds;
-          
-                  socket.emit("timer"+roomCode, minutes + ":" + seconds);
-                  console.log("EMITTING TIMER:", minutes + ":" + seconds)
-                  
-                  if (--timer < 0 || timer < 0) {
-                    timer = duration;
-                    clearInterval(ongoingtimer); 
-                  }
-                 
-                // } else {
-                //   timer = duration;
-                //   clearInterval(ongoingtimer); 
-                // }
-            
-            
-              }, 1000);
-              
-              io.on('stop'+roomCode, () => {
-                timer = duration;
-                clearInterval(ongoingtimer); 
-              })
-          
-          }
 
           const createRoom = (socket, name, roomCode) => {
             db.collection("rooms").doc(roomCode).set(
@@ -144,8 +108,7 @@ const onGoingTimers = [];
           }
         
           const startOrStopGame = (socket, roomCode) => {
-            let launchtimer = false;
-            let timerValue = "";
+          
             return db.runTransaction(function(transaction) {
               return transaction.get(db.collection("rooms").doc(roomCode)).then(function(sfDoc) {
                   if (!sfDoc.exists) {
@@ -162,10 +125,7 @@ const onGoingTimers = [];
         
                   if (doc.isStarted === true) { 
                     newState = false;
-                    // stop timer here
-                    // onGoingTimers.splice(onGoingTimers.indexOf(roomCode));
-                    io.emit("stop"+roomCode, "stop");
-                    
+                  
                   } else if (doc.isStarted === false) {
                   launchtimer = true;
                   timerValue = doc.timeLimit;
@@ -181,7 +141,6 @@ const onGoingTimers = [];
                   }
                   }
                   delete notSpies[spy];
-                  console.log("SPY", spy, "NOT SPIES", notSpies)
                 };
         
                 transaction.update(db.collection("rooms").doc(roomCode), { 
@@ -192,6 +151,7 @@ const onGoingTimers = [];
                   locationIndex,
                   readyPlayerCount: 0,
                   readyPlayers: [],
+                  // localTimer: timerValue,
                 });
         
         
@@ -199,12 +159,7 @@ const onGoingTimers = [];
 
           }).then(function() {
               getRoomFromCode(socket, roomCode)
-              if (launchtimer === true && allowTimer === true) {
-                console.log("TRYING TO START TIMER FOR ROOM"+roomCode)
-                var timeInSeconds = (parseInt(timerValue.substring(0, 2)) * 60) + parseInt(timerValue.substring(4,6));
-                onGoingTimers.push(roomCode);
-                startTimer(socket, roomCode, timeInSeconds);
-              }
+           
               console.log("Transaction START GAME successfully committed!");
           }).catch(function(error) {
               console.log("Transaction failed: ", error);

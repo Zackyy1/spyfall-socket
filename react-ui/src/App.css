@@ -112,7 +112,6 @@ ul {
   float: left;
   justify-content: center;
   align-content: center;
-
   width: 46%;
   font-size: 0.9em;
   height: 50px;
@@ -140,9 +139,6 @@ ul {
   /* margin-top: 10px; */
 }
 
-.selected {
-  background: rgb(77, 77, 77);
-}
 
 .selected {
   background-color: #424242;
