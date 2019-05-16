@@ -8,8 +8,6 @@ const port = process.env.PORT || 4001; // 80? 443?
 console.log("LISTENING ON PORT", process.env.PORT);
 const socketManager = require('./SocketManager')
 
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -26,19 +24,7 @@ var allowCrossDomain = function(req, res, next) {
 
 
 // Multi-process to utilize all CPU cores.
-if (!isDev && cluster.isMaster) {
-  console.error(`Node cluster master ${process.pid} is running`);
 
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-
-  cluster.on('exit', (worker, code, signal) => {
-    console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
-  });
-
-} else {
   
 
   // Priority serve any static files.
@@ -73,4 +59,4 @@ server.listen(port,() => {
 
 
 
-}
+
