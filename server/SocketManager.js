@@ -197,7 +197,7 @@ const onGoingTimers = [];
                   let doc = sfDoc.data();
                   let newTime = timeLimit;
                   console.log("Trying to push new time:", newTime)
-                  console.log(sfDoc.data());
+                  // console.log(sfDoc.data());
                 transaction.update(db.collection("rooms").doc(roomCode), { 
                   timeLimit: newTime
                 })

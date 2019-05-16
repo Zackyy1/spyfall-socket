@@ -80,7 +80,7 @@ export class Lobby extends Component {
         socket.emit("requestRoomInfo", this.state.roomCode);
         // 
         socket.on("room"+this.state.roomCode, room => {
-                this.setState({room: room});
+                this.setState({room: room, timeLimit: room.timeLimit});
         })
         
    
@@ -89,12 +89,8 @@ export class Lobby extends Component {
     
     
     changeTime = (newTime) => {
-        this.setState({
-          localTimer: newTime,
-        //   timeLimit: newTime,
-        },() => {
-          localStorage.setItem('localTimer', JSON.stringify(newTime))
-        });
+        this.setState({localTimer: newTime});
+        localStorage.setItem('localTimer', JSON.stringify(newTime))
       }
 
     componentWillUnmount() {
@@ -157,7 +153,6 @@ export class Lobby extends Component {
 
   
             if (this.state.room) {
-                console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit)
                 let notSpies = Object.keys(this.state.room.notSpies);
                 // console.log("CHECKING FOR NAME IN NOTSPIES", notSpies, ("Rick" in notSpies))
                 // console.log("TEST", )
@@ -238,6 +233,8 @@ export class Lobby extends Component {
       
         }, 1000);
         
+    } else {
+        // console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit)
     }
 }
     
@@ -247,11 +244,12 @@ export class Lobby extends Component {
         // Timer code goes here
         if (this.state.room && this.state.room.isStarted) {
 
-        // if (this.state.localTimer == undefined) {
-        //     this.setState({localTimer: this.state.room.timeLimit})
-        // }
-
-            this.startTimer(this.state.localTimer)
+        if (this.state.localTimer == undefined) {
+            this.setState({localTimer: this.state.room.timeLimit})
+         }
+            let toCount = JSON.parse(localStorage.getItem('localTimer'));
+            if (toCount == "NaN:NaN") { toCount = this.state.room.timeLimit}
+            this.startTimer(toCount) // this.state.localTimer
             return (
                 <p className="text" id="timer">{this.dict("timeRemaining")}: {this.state.localTimer}</p>
             )
@@ -267,6 +265,9 @@ export class Lobby extends Component {
     if (this.state.room && this.state.room.readyPlayers.indexOf(this.state.name) > -1) {
       $("#readyButton").remove();
     }
+
+    // console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit, localStorage.getItem('localTimer'))
+
     
     return this.state.room ? this.state.room.players.map(player => (
         <div className="player" key={player.toString()} id={player}>{player}</div> 
@@ -280,7 +281,7 @@ export class Lobby extends Component {
           $("#hostTimer").remove()
           socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
         }
-        if (this.state.room) {
+        if (this.state.room && this.state.room.isStarted == false) {
             this.changeTime(this.state.room.timeLimit)
             console.log("TIMER RESET TO", this.state.timeLimit)
         }
@@ -291,7 +292,7 @@ export class Lobby extends Component {
     hostTimer = () => {
       if (this.state.room && this.state.name === this.state.room.host) {
           // clear storage
-          socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: $("#timerInput").value})
+          socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
 
           return (
             <div id="hostTimer">
@@ -313,6 +314,7 @@ export class Lobby extends Component {
 
 
   render() {
+
       if (this.state.room && this.state.room.isStarted != true) { 
 
           return (
