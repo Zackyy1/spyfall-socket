@@ -292,7 +292,10 @@ export class Lobby extends Component {
     hostTimer = () => {
       if (this.state.room && this.state.name === this.state.room.host) {
           // clear storage
-          socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
+          let newvalues =  $("#timerInput").val() || this.state.timeLimit;
+          console.log(newvalues)
+
+          socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: newvalues})
 
           return (
             <div id="hostTimer">
