@@ -48,7 +48,16 @@ if (!isDev && cluster.isMaster) {
   app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
+
   
+  io.on('connection', socketManager);
+// app.use(express.static(__dirname + '/../../public/index.html'))
+
+server.listen(port,() => {
+    console.log("Listening on port", port)
+})
+
+
 // app.use(express.static(path.join(__dirname, '../react-ui/build')));
 // if(process.env.NODE_ENV === 'production') {
 //     app.use(express.static(path.join(__dirname, '../react-ui/build')));
@@ -62,10 +71,6 @@ if (!isDev && cluster.isMaster) {
 //     res.sendFile(path.join(__dirname+'../react-ui/public/index.html'));
 //   })
 
-  
-io.on('connection', socketManager);
-// app.use(express.static(__dirname + '/../../public/index.html'))
 
-server.listen(port,() => {
-    console.log("Listening on port", port)
-})
+
+}
