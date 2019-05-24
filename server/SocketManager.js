@@ -55,6 +55,7 @@ const onGoingTimers = [];
                 isFinished: false,
                 readyPlayers: [],
                 readyPlayerCount: 0,
+                firstQuestion: "",
                 players: [name],
                 playerCount: 1,
                 language: "English",
@@ -72,9 +73,18 @@ const onGoingTimers = [];
                   if (!sfDoc.exists) {
                       throw "Document does not exist!";
                   }
-                  var newPopulation = sfDoc.data().playerCount + 1;
-                  var newPlayers = [...sfDoc.data().players, name];
-                  transaction.update(db.collection("rooms").doc(roomCode), { playerCount: sfDoc.data().playerCount + 1, players: newPlayers });
+                    var newPopulation = sfDoc.data().playerCount;
+                    var newPlayers = [...sfDoc.data().players];
+                    var plrs = sfDoc.data().players;
+                    console.log(plrs.indexOf(name), name in plrs);
+                  if (plrs.indexOf(name) == -1) { 
+                    console.log("USER NOT EXISTING, MAKING NEW ENTRY")
+                    newPopulation = sfDoc.data().playerCount + 1;
+                    newPlayers = [...sfDoc.data().players, name]; 
+                  } else {
+                    console.log("USER EXISTS, SKIPPING ADD")
+                  }
+                  transaction.update(db.collection("rooms").doc(roomCode), { playerCount: newPopulation, players: newPlayers });
               });
           }).then(function() {
               console.log("Transaction JOIN successfully committed!");
@@ -97,6 +107,7 @@ const onGoingTimers = [];
                     readyPlayerCount: newPopulation,
                     isStarted: false, 
                     spy: "", 
+                    firstQuestion: "",
                     notSpies: [], 
                     location: "",
                     locationIndex: 0,}
@@ -114,7 +125,7 @@ const onGoingTimers = [];
                     notSpies: fromStart.notSpies, 
                     location: fromStart.location,
                     locationIndex: fromStart.locationIndex,
-                    
+                    firstQuestion: fromStart.firstQuestion,
                   });
               });
           }).then(function() {
@@ -160,7 +171,7 @@ const onGoingTimers = [];
                   let locationIndex = 0;
                   let location = "";
                   let roleIndex = 0;
-        
+                  let firstQuestion = "";
                   if (doc.isStarted === true) { 
                     newState = false;
                   
@@ -172,7 +183,7 @@ const onGoingTimers = [];
                   notSpies = {};
                   locationIndex = locations.length * Math.random() | 0;
                   location = locations[locationIndex].title;
-                  
+                  firstQuestion = players[players.length * Math.random() | 0];
                   for (let i = 0; i < players.length; i++) {
                     notSpies[players[i]] = {role: locations[locationIndex].roles[roleIndex],
                     roleIndex: roleIndex = locations[locationIndex].roles.length * Math.random() | 0,
@@ -183,6 +194,7 @@ const onGoingTimers = [];
                 return {
                   isStarted: newState, 
                   spy, 
+                  firstQuestion: firstQuestion,
                   notSpies, 
                   location,
                   locationIndex,}

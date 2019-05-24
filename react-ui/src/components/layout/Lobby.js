@@ -301,6 +301,15 @@ export class Lobby extends Component {
     
     }
 
+    showFirstQuestion() {
+        if (this.state.room ){
+            // console.log($("#"+this.state.room.firstQuestion).insertAfter("p", "1st"))
+            $("#"+this.state.room.firstQuestion).html(this.state.room.firstQuestion+"<sup>1st</sup>");
+            console.log($("#"+this.state.room.firstQuestion).text)
+            // $("#"+this.state.room.firstQuestion).innerHTML =  $("#"+this.state.room.firstQuestion).innerHTML + "-1st"
+        }
+    }
+
     handleReady = e => {
         $("#"+this.state.name).addClass("ready");
         if (this.state.room && this.state.name === this.state.room.host) {
@@ -373,6 +382,7 @@ export class Lobby extends Component {
              
                   <div className="player-list container">
                       {this.makePlayerList()}
+                      {this.showFirstQuestion()}
                   </div>
                   
              
