@@ -17,7 +17,8 @@ const dict = {
         "choosetime": "Ограничение по времени",
         "timesUp": "Время вышло!",
         "timeRemaining": "Осталось времени",
-
+        "showRole": "Показать роль",
+        "hideRole": "Спрятать роль",
   
     },
     'english': {
@@ -36,8 +37,10 @@ const dict = {
         "spy": "Spy",
         "finish": "Finish",
         "choosetime": "Choose time limit",
-        "timesUp": "Time's up",
+        "timesUp": "Time's up!",
         "timeRemaining": "Time remaining",
+        "showRole": "Show role",
+        "hideRole": "Hide role",
   
     }
 }

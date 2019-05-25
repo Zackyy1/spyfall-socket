@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import socketIOClient from "socket.io-client";
 import Loader from '../Loader'
 import $ from 'jquery'
-
 import dict from '../../Dictionary'
 import Locations from '../../Locations'
 import LocationsRus from '../../LocationsRus'
@@ -22,11 +21,6 @@ export class Lobby extends Component {
         function tryParseJSON (jsonString){
             try {
                 var o = JSON.parse(jsonString);
-                console.log(o)
-                // Handle non-exception-throwing cases:
-                // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-                // but... JSON.parse(null) returns null, and typeof null === "object", 
-                // so we must check for that, too. Thankfully, null is falsey, so this suffices:
                 return o
             }
             catch (e) { console.log(e) }
@@ -41,35 +35,23 @@ export class Lobby extends Component {
             roomCode: window.location.pathname.slice(2+window.location.pathname.slice(1).search("/")),
             name: this.props.location.state.name,
             language: this.props.location.state.language,
+            roleHidden: false,
         }
       }
     
     
     componentDidMount() {
 
-        
-        
-
-        // this.setState({timeLimit: $("#timer").value})
-        
         this.state.room && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
-            $("#"+player).addClass("ready");
+            return $("#"+player).addClass("ready");
         });
-
-        // if (this.state.room && this.state.name in this.state.room.readyPlayers && this.state.name == this.state.room.host) {
-        //     console.log("Removing input for a ready host")
-        //     $("#timerInput").remove();
-        // }
-
-       
 
         socket.emit("requestRoomInfo", this.state.roomCode);
         // 
         socket.on("room"+this.state.roomCode, room => {
                 this.setState({room: room, timeLimit: room.timeLimit});
         })
-        
-   
+
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -81,33 +63,38 @@ export class Lobby extends Component {
                 }
 
             }
-            this.state.room.readyPlayerCount > 0 && this.state.room.isStarted == false && this.state.room.readyPlayers.map(player => {
-                $("#"+player).addClass("ready");
+            this.state.room.readyPlayerCount > 0 && this.state.room.isStarted === false && this.state.room.readyPlayers.map(player => {
+                return $("#"+player).addClass("ready");
             })
         }
 
-        $(".location").click( e => {
-            if (e.target.classList.contains('selected')) {
-                e.target.classList.remove("selected");
+    }
 
-            } else {
-            e.target.classList.add('selected')
-            console.log("Added class selected")
-            }
-    });
-    $(".player").on("click", function(event){
-        console.log("Clicked")
-        if (event.target.classList.contains('selected')) {
-            event.target.classList.remove("selected");
+    clickAction = (e) => {
+        // console.log(e)
+        if (!e.target.classList.contains("selected")) {
+                e.target.classList.add("selected")
+        } else {
+            e.target.classList.remove("selected")
+
+        }
+    }
+
+    
+    classAction(id, classname) {
+        if (!document.getElementById(id).classList.contains(classname)) {
+            document.getElementById(id).classList.add(classname)
+            document.getElementById("roleButton").innerHTML = this.dict("showRole");
+            // console.log("added class", classname, " to", id)
 
         } else {
-        event.target.classList.add('selected')
+            document.getElementById(id).classList.remove(classname)
+            // console.log("removed class", classname, " from", id)
+            document.getElementById("roleButton").innerHTML = this.dict("hideRole");
+
+
         }
-    });
-
-
     }
-    
 
     
     
@@ -131,7 +118,7 @@ export class Lobby extends Component {
       }
 
       handleFinish = e => {
-        console.log("Game finished");
+        // console.log("Game finished");
         // clearInterval(ongoingtimer);
         socket.emit("finish", this.state.roomCode);
     }
@@ -146,7 +133,7 @@ export class Lobby extends Component {
 
     showLocations() {
         let toShow = LocationsRus.locationsRus;
-        if (this.state.language == "Russian") {
+        if (this.state.language === "Russian") {
             toShow = LocationsRus.locationsRus;
         } else {
             toShow = Locations.locations;
@@ -154,16 +141,16 @@ export class Lobby extends Component {
 
         return ( toShow.map(loc => {
             return(
-           <div className="location" key={loc.title}>{loc.title}</div>
+           <div className="location" onClick={(e) => this.clickAction(e)} key={loc.title}>{loc.title}</div>
            )}))
             
         }
 
         showOneLocation(index, roleIndex) {
-            if (this.state.language == "Russian") {
+            if (this.state.language === "Russian") {
             
             return ( {location: LocationsRus.locationsRus[index].title, role: LocationsRus.locationsRus[index].roles[roleIndex]} )
-                } else if (this.state.language == "English") {
+                } else if (this.state.language === "English") {
         
                     return ( {location: Locations.locations[index].title, role: Locations.locations[index].roles[roleIndex]} )
             }
@@ -180,8 +167,7 @@ export class Lobby extends Component {
                     $("#"+this.state.room.players[i]).removeClass("ready");
                 }
                 let notSpies = Object.keys(this.state.room.notSpies);
-                // console.log("CHECKING FOR NAME IN NOTSPIES", notSpies, ("Rick" in notSpies))
-                // console.log("TEST", )
+                
                 var notSpy = notSpies.find(name => name === this.state.name); // Returns name
                  if (notSpy) {
                     let index = this.state.room.locationIndex;
@@ -224,43 +210,36 @@ export class Lobby extends Component {
 
     startTimer = (time) => {
         if (time) {
-        var duration = this.hmsToSecondsOnly(time);//(parseInt(time.substring(0, 2)) * 60) + parseInt(time.substring(4,6));
+        var duration = this.hmsToSecondsOnly(time);
         let timer = duration, minutes, seconds;
         if (!ongoingtimer) {
 
           ongoingtimer = setInterval(() => {
             
-            // console.log("Timer going for", roomCode, roomCode in onGoingTimers);
-              // if (roomCode in onGoingTimers) {
+           
            
             minutes = parseInt(timer / 60, 10)
             seconds = parseInt(timer % 60, 10);
     
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-    
-            // $("#timer").innerHTML= `${word}: ${minutes}:${seconds}`;
-
-            
-            // this.setState({localTimer: `${minutes}:${seconds}`})
             this.changeTime(`${minutes}:${seconds}`);
+
+            // console.log(this.state.localTimer, this.state.timeLimit, localStorage.getItem("localTimer"))
             
-            if (--timer < 0 || timer < 0  || this.state.room.isStarted == false) {
+            if (--timer < 0 || timer < 0  || this.state.room.isStarted === false) {
               timer = duration;
               clearInterval(ongoingtimer); 
               ongoingtimer = null;
+            //   console.log("GAME FINISHED")
+              if (document.getElementById("timer") !== null) {
+                document.getElementById("timer").innerHTML = this.dict("timesUp");
+              }
             }
-           
-          // } else {
-          //   timer = duration;
-          //   clearInterval(ongoingtimer); 
-          // }
-      
       
         }, 1000);
-        
     } else {
-        // console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit)
+        // console.log("What happens here?")
     }
 }
     
@@ -270,11 +249,13 @@ export class Lobby extends Component {
         // Timer code goes here
         if (this.state.room && this.state.room.isStarted) {
 
-        if (this.state.localTimer == undefined) {
+        if (this.state.localTimer === undefined) {
             this.setState({localTimer: this.state.room.timeLimit})
          }
             let toCount = JSON.parse(localStorage.getItem('localTimer'));
-            if (toCount == "NaN:NaN") { toCount = this.state.room.timeLimit}
+            if (toCount === "NaN:NaN") { toCount = this.state.room.timeLimit }
+            // this.setState({timeLimit: toCount})
+
             this.startTimer(toCount) // this.state.localTimer
             return (
                 <p className="text" id="timer">{this.dict("timeRemaining")}: {this.state.localTimer}</p>
@@ -284,29 +265,18 @@ export class Lobby extends Component {
     }
 
     makePlayerList = () => {
-    this.state.room && this.state.room.isStarted == false && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
-        $("#"+player).addClass("ready");
+    this.state.room && this.state.room.isStarted === false && this.state.room.readyPlayerCount > 0 && this.state.room.readyPlayers.map(player => {
+        return $("#"+player).addClass("ready");
     })
-
-    // if (this.state.room && this.state.room.readyPlayers.indexOf(this.state.name) > -1) {
-    //   $("#readyButton").remove();
-    // }
-
-    // console.log(this.state.timeLimit, this.state.localTimer, this.state.room.timeLimit, localStorage.getItem('localTimer'))
-
-    
     return this.state.room ? this.state.room.players.map(player => (
-        <div className="player" key={player.toString()} id={player}>{player}</div> 
+        <div className="player" onClick={(e) => this.clickAction(e)} key={player.toString()} id={player}>{player}</div> 
     )) : <Loader />
     
     }
 
     showFirstQuestion() {
         if (this.state.room ){
-            // console.log($("#"+this.state.room.firstQuestion).insertAfter("p", "1st"))
             $("#"+this.state.room.firstQuestion).html(this.state.room.firstQuestion+"<sup>1st</sup>");
-            console.log($("#"+this.state.room.firstQuestion).text)
-            // $("#"+this.state.room.firstQuestion).innerHTML =  $("#"+this.state.room.firstQuestion).innerHTML + "-1st"
         }
     }
 
@@ -316,9 +286,8 @@ export class Lobby extends Component {
           $("#hostTimer").remove()
           socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
         }
-        if (this.state.room && this.state.room.isStarted == false) {
+        if (this.state.room && this.state.room.isStarted === false) {
             this.changeTime(this.state.room.timeLimit)
-            console.log("TIMER RESET TO", this.state.timeLimit)
         }
         socket.emit("playerReady", {roomCode: this.state.roomCode, name: this.state.name})
 
@@ -328,7 +297,7 @@ export class Lobby extends Component {
       if (this.state.room && this.state.name === this.state.room.host) {
           // clear storage
           let newvalues =  $("#timerInput").val() || this.state.timeLimit;
-          console.log(newvalues)
+        //   console.log(newvalues)
 
           socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: newvalues})
 
@@ -342,10 +311,9 @@ export class Lobby extends Component {
   }
 
   handleTimeChange = e => {
-    console.log("New time:", e.target.value)
+    // console.log("New time:", e.target.value)
     this.setState({timeLimit: e.target.value, localTimer: e.target.value});
     this.changeTime(e.target.value);
-    // socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
 
   }
     
@@ -353,7 +321,7 @@ export class Lobby extends Component {
 
   render() {
 
-      if (this.state.room && this.state.room.isStarted != true) { 
+      if (this.state.room && this.state.room.isStarted !== true) { 
 
           return (
         <div className="center">
@@ -376,8 +344,12 @@ export class Lobby extends Component {
     ) } else if (this.state.room && this.state.room.isStarted === true) {
         return(
             <div className="center">
-            
-                {this.checkMyRole()}
+                <div className="role" id="role">
+                    {this.checkMyRole()}
+                </div>
+                <div className="role-button-div">
+                    <button className="btn z-depth-0 role-button" id="roleButton" onClick={(e) => this.classAction("role", "hidden-role")}>{this.dict("hideRole")}</button>
+                </div>
                 {this.timer()}
              
                   <div className="player-list container">

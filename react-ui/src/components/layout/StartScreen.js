@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, withRouter, Route, Redirect, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import socketIOClient from "socket.io-client";
 import dict from '../../Dictionary'
-import Navbar from "./Navbar";
 
 import server from '../../config/serverConfig'
 const socket = socketIOClient(server);
@@ -31,7 +30,7 @@ export class StartScreen extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log("Submitted")
+    // console.log("Submitted")
   }
 
   getRandomInt(min, max) {
@@ -63,12 +62,11 @@ export class StartScreen extends Component {
 
   langRus = e => {
     this.setState({language: "Russian"})
-    console.log("CHANGED TO RUSSIAN");
+    // console.log("CHANGED TO RUSSIAN");
   }
   langEng = e => {
     this.setState({language: "English"})
-    console.log("CHANGED TO ENGLISH");
-
+    // console.log("CHANGED TO ENGLISH");
   }
 
   dict(word) {
@@ -111,8 +109,8 @@ export class StartScreen extends Component {
   {this.dict("language")}
   </button>
   <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a className="dropdown-item big-text" onClick={() => this.langRus()}>{this.dict("russian")}</a>
-    <a className="dropdown-item big-text" onClick={() => this.langEng()}>{this.dict("english")}</a>
+    <p className="dropdown-item big-text" onClick={() => this.langRus()}>{this.dict("russian")}</p>
+    <p className="dropdown-item big-text" onClick={() => this.langEng()}>{this.dict("english")}</p>
   </div>
 </div>
       </div>

@@ -167,10 +167,13 @@ ul {
 .selected {
   background-color: #42424232;
   background: #42424232;
+  color: #181818;
+  -webkit-text-fill-color: #6d6d6d;
 
-  text-decoration: line-through;
+  /* text-decoration: line-through;
   text-decoration-color: black;
-  text-decoration-style: double;
+  text-decoration-style: double; */
+  /* text-dec */
   
 
 }
@@ -183,6 +186,54 @@ ul {
   color: white;
   font-weight: normal;
 
+}
+
+.role {
+  margin-top: 0px;
+  transition: margin-top 0.2s, ease 0.2s;
+}
+
+
+.role-button {
+  background-color: #7c7c7c00;
+  height: auto;
+  margin-bottom: 15px;
+  margin-top: 0px;
+  color: white;
+}
+
+.role-button:active {
+  background-color: #7e434300;
+  color: white;
+
+}
+
+.role-button:focus {
+  background-color: #7e434300;
+  color: white;
+
+}
+
+.role-button:disabled {
+  background-color: #7e434300;
+  color: white;
+
+}
+.role-button:hover {
+  background-color: #7e434300;
+  color: white;
+
+}
+
+
+.role {
+
+}
+
+.hidden-role {
+  /* display: none; */
+  margin-top: -90px;
+  transition: margin-top 0.2s, ease 0.2s;
 }
 
 
