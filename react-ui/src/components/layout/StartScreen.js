@@ -15,10 +15,24 @@ export class StartScreen extends Component {
     name: "",
     response: false,
     language: "English",
+    roomFound: true,
+    roomCode: "",
+    wrongCode: false,
+    wrongName: false,
   }
 
   componentDidMount() {
-  
+    socket.on("roomFound", () => {
+      this.props.history.push({
+        pathname: "/room/"+this.state.roomCode,
+        state: this.state,
+   });
+    });
+    socket.on("room404", () => {
+      console.log("Room not found")
+      this.setState({roomFound: false})
+      this.notifyRoom404();
+    })
   }
   
 
@@ -53,11 +67,49 @@ export class StartScreen extends Component {
 
   handleJoinGame = () => {
     // Join game here
-    socket.emit("joinGame", {name: this.state.name, roomCode: this.state.roomCode})
-    this.props.history.push({
-      pathname: "/room/"+this.state.roomCode,
-      state: this.state,
- });
+    if (this.state.name.length < 2) {
+      this.setState({wrongName: true})
+      this.notifyWrongName();
+      // alert("Hello!")
+    } else {
+
+    
+      if (this.state.roomCode !== "" && this.state.roomCode !== null  && this.state.roomCode.length === 4) {
+      socket.emit("joinGame", {name: this.state.name, roomCode: this.state.roomCode})
+      } else {
+        this.setState({wrongCode: true})
+        this.notifyWrongCode();
+      }
+    // Check if game exists and not currently going on
+    }
+  }
+
+  notifyRoom404() {
+    
+    setTimeout(() => {
+      // document.getElementById("tempLabel").remove()
+      this.setState({roomFound: true})
+
+    }, 3000);
+    
+  }
+  notifyWrongCode() {
+    
+    setTimeout(() => {
+      // document.getElementById("tempLabel").remove()
+      this.setState({wrongCode: false})
+
+    }, 3000);
+    
+  }
+  notifyWrongName() {
+    
+    setTimeout(() => {
+      // document.getElementById("tempLabel").remove()
+      this.setState({wrongName: false})
+
+    }, 3000);
+    
   }
 
   langRus = e => {
@@ -98,9 +150,20 @@ export class StartScreen extends Component {
           <div style={{paddingTop: "25px"}}>
             <h5 className="text">{this.dict("or")}</h5>
             <label className="text big-text" htmlFor="roomCode">{this.dict("enterCode")}</label>
-            <input type="text" id="roomCode" onChange={this.handleChange} className="center text big-text"/>
+            <input type="number" id="roomCode" onChange={this.handleChange} className="center text big-text"/>
             <button className="btn button big-text" onClick={() => this.handleJoinGame()}>{this.dict("joinGame")}</button>
-
+            { this.state.roomFound === false && 
+            <div id="tempLabel">
+               <p style={{color: "white", fontSize: "1.3em", paddingTop: "15px"}}>{this.dict("room404")}</p>
+            </div> }
+            { this.state.wrongCode === true && 
+            <div id="tempLabel2">
+               <p style={{color: "white", fontSize: "1.3em", paddingTop: "15px"}}>{this.dict("wrongCode")}</p>
+            </div> }
+            { this.state.wrongName === true && 
+            <div id="tempLabel3">
+               <p style={{color: "white", fontSize: "1.3em", paddingTop: "15px"}}>{this.dict("wrongName")}</p>
+            </div> }
           </div>
         </form>
         </div>

@@ -19,6 +19,10 @@ const dict = {
         "timeRemaining": "Осталось времени",
         "showRole": "Показать роль",
         "hideRole": "Спрятать роль",
+        "wrongCode" : "Неверный номер комнаты",
+        "room404" : "Комната не найдена",
+        "wrongName" : "Пожалуйста введите ваше имя",
+
   
     },
     'english': {
@@ -41,7 +45,9 @@ const dict = {
         "timeRemaining": "Time remaining",
         "showRole": "Show role",
         "hideRole": "Hide role",
-  
+        "wrongCode" : "Wrong room code",
+        "room404" : "Room not found",
+        "wrongName" : "Please enter your name",
     }
 }
 

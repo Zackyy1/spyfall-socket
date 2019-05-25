@@ -89,8 +89,10 @@ const onGoingTimers = [];
           }).then(function() {
               console.log("Transaction JOIN successfully committed!");
               getRoomFromCode(socket, roomCode)
+              socket.emit("roomFound", roomCode)
           }).catch(function(error) {
               console.log("Transaction failed: ", error);
+              socket.emit("room404", {})
           });
           }
         
@@ -224,7 +226,7 @@ const onGoingTimers = [];
           });
           }
 
-module.exports = function(socket){
+module.exports = async function(socket){
     console.log("Socket Id:" + socket.id);
 
       socket.on("gameCreate", e => {
