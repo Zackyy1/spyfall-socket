@@ -304,7 +304,7 @@ export class Lobby extends Component {
           return (
             <div id="hostTimer">
             <label htmlFor="timeLimit" className="text">{this.dict('choosetime')}</label>
-            <input type="time" className="time text center" id="timerInput" onChange={this.handleTimeChange} defaultValue="07:00"/>
+            <input type="time" style={{textAlign: "center"}} className="time text center" id="timerInput" onChange={this.handleTimeChange} defaultValue="07:00"/>
             </div>
             )
       }
