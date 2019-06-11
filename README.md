@@ -1,4 +1,4 @@
-**Spyfall
+**Spyfall**
 
 Spyfall web application based on Spyfall table game and various web apps, such as spyfall.crabhat.com and spyfall.adrianocola.com
 
