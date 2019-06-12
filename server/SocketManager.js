@@ -47,6 +47,8 @@ const onGoingTimers = [];
           
 
           const createRoom = (socket, name, roomCode) => {
+            const newTime = new Date();
+            const createdAt = newTime.getTime();
             db.collection("rooms").doc(roomCode).set(
               {
                 host: name, 
@@ -60,8 +62,11 @@ const onGoingTimers = [];
                 playerCount: 1,
                 language: "English",
                 timeLimit: "07:00",
+                createdAt,
               }).then(() => {
-                getRoomFromCode(socket, roomCode)
+                getRoomFromCode(socket, roomCode);
+                deleteOldRooms();
+
               console.log("Successfully created room")
             }).catch(err => {
               console.log(err)
@@ -224,6 +229,36 @@ const onGoingTimers = [];
           }).catch(function(error) {
               console.log("Transaction failed: ", error);
           });
+          }
+
+          const deleteOldRooms = async () => {
+            const snapshot = await db.collection('rooms').get().then()
+            const nowDate = new Date();
+            const nowTimestamp = nowDate.getTime();
+            snapshot.docs.map(doc => {
+
+                            // Calculate the difference in milliseconds
+                var difference_ms = nowTimestamp - doc.data().createdAt;
+                //take out milliseconds
+                difference_ms = difference_ms/1000;
+                var seconds = Math.floor(difference_ms % 60);
+                difference_ms = difference_ms/60; 
+                var minutes = Math.floor(difference_ms % 60);
+                difference_ms = difference_ms/60; 
+                var hours = Math.floor(difference_ms % 24);  
+
+
+                if (hours > 2) {
+                  db.collection('rooms').doc(doc.data().roomCode).delete().then(adel => {
+                    console.log("Deleted room after 2 hours");
+
+                  }).catch(e => {
+                    console.log("Error deleting:",e);
+                  })
+                }
+                
+
+            });
           }
 
 module.exports = async function(socket){
