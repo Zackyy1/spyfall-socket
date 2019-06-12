@@ -22,6 +22,7 @@ const dict = {
         "wrongCode" : "Неверный номер комнаты",
         "room404" : "Комната не найдена",
         "wrongName" : "Пожалуйста введите ваше имя",
+        "minutes" : "минут",
 
   
     },
@@ -48,6 +49,7 @@ const dict = {
         "wrongCode" : "Wrong room code",
         "room404" : "Room not found",
         "wrongName" : "Please enter your name",
+        "minutes" : "minutes",
     }
 }
 

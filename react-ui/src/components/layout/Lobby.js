@@ -14,28 +14,29 @@ const socket = socketIOClient(server);
 let ongoingtimer;
 export class Lobby extends Component {
 
+    tryParseJSON (jsonString){
+        try {
+            var o = JSON.parse(jsonString);
+            return o
+        }
+        catch (e) { console.log(e) }
     
+        return "";
+    };
 
     constructor(props) {
         
-        function tryParseJSON (jsonString){
-            try {
-                var o = JSON.parse(jsonString);
-                return o
-            }
-            catch (e) { console.log(e) }
         
-            return "";
-        };
 
         super(props);
         this.state = {
             timeLimit: "07:00",
-            localTimer: tryParseJSON(localStorage.getItem('localTimer')),
+            localTimer: null, //tryParseJSON(localStorage.getItem('localTimer')),
             roomCode: window.location.pathname.slice(2+window.location.pathname.slice(1).search("/")),
             name: this.props.location.state.name,
             language: this.props.location.state.language,
             roleHidden: false,
+            timeLabel: 7,
         }
       }
     
@@ -49,8 +50,19 @@ export class Lobby extends Component {
         socket.emit("requestRoomInfo", this.state.roomCode);
         // 
         socket.on("room"+this.state.roomCode, room => {
-                this.setState({room: room, timeLimit: room.timeLimit});
+                this.setState({room: room, timeLimit: room.timeLimit, localTimer: room.timeLimit});
+                localStorage.setItem('localTimer', JSON.stringify(room.timeLimit));
         })
+
+        console.log(localStorage.getItem("localTimer"))
+
+        // if (this.state.room) {
+        //     this.setState({localTimer: this.state.room.timeLimit})
+        //     console.log("Changed time correctly")
+        // }
+
+        
+
 
     }
 
@@ -249,14 +261,20 @@ export class Lobby extends Component {
         // Timer code goes here
         if (this.state.room && this.state.room.isStarted) {
 
-        if (this.state.localTimer === undefined) {
+        if (this.state.localTimer === null) {
             this.setState({localTimer: this.state.room.timeLimit})
+            console.log("Localtimer null, making it the same as timeLimit, which is",this.state.room.timeLimit )
          }
+
+
             let toCount = JSON.parse(localStorage.getItem('localTimer'));
+
             if (toCount === "NaN:NaN") { toCount = this.state.room.timeLimit }
             // this.setState({timeLimit: toCount})
-
-            this.startTimer(toCount) // this.state.localTimer
+            console.log("Passing time to timer:", toCount)
+            console.log("Localtimer:",this.state.localTimer)
+            console.log("timeLimit:", this.state.timeLimit)
+            this.startTimer(toCount) // toCount || this.state.localTimer
             return (
                 <p className="text" id="timer">{this.dict("timeRemaining")}: {this.state.localTimer}</p>
             )
@@ -287,10 +305,16 @@ export class Lobby extends Component {
           socket.emit("timeChange", {roomCode: this.state.roomCode, timeLimit: this.state.timeLimit})
         }
         if (this.state.room && this.state.room.isStarted === false) {
-            this.changeTime(this.state.room.timeLimit)
+            // this.changeTime(this.state.room.timeLimit)
         }
         socket.emit("playerReady", {roomCode: this.state.roomCode, name: this.state.name})
 
+    }
+
+    setNewTimeLimit = e => {
+        console.log("New time limit:", e.target.innerHTML)
+        this.setState({timeLabel: e.target.innerHTML})
+        this.handleTimeChange(e.target.innerHTML+":00")
     }
 
     hostTimer = () => {
@@ -303,17 +327,29 @@ export class Lobby extends Component {
 
           return (
             <div id="hostTimer">
-            <label htmlFor="timeLimit" className="text">{this.dict('choosetime')}</label>
-            <input type="time" className="time text center" id="timerInput" onChange={this.handleTimeChange} defaultValue="07:00"/>
+            
+            {/* <input type="time" className="time text center" id="timerInput" onChange={this.handleTimeChange} defaultValue="07:00"/> */}
+            <p style={{color: "white"}}>{this.dict('choosetime')}</p>
+            <div className="btn-group btn-group-toggle z-depth-0 btn-group-lg" id="timeSetter" data-toggle="buttons">
+            
+                <button className="btn z-depth-0 time-button" onClick={(e) => this.setNewTimeLimit(e)} checked>5</button>
+                <button className="btn z-depth-0 time-button" onClick={(e) => this.setNewTimeLimit(e)} >7</button>
+                <button className="btn z-depth-0 time-button" onClick={(e) => this.setNewTimeLimit(e)} >10</button>
+                <button className="btn z-depth-0 time-button" onClick={(e) => this.setNewTimeLimit(e)} >15</button>
+
+            </div>
+            <div className="divider"></div>
+                <h5 style={{color: "white", marginTop:"30px"}}>{this.state.timeLabel} {this.dict("minutes")}</h5>
             </div>
             )
       }
   }
 
   handleTimeChange = e => {
-    // console.log("New time:", e.target.value)
-    this.setState({timeLimit: e.target.value, localTimer: e.target.value});
-    this.changeTime(e.target.value);
+    console.log("New time:", e)
+    // this.setState({timeLimit: e.target.value, localTimer: e.target.value});
+    this.setState({timeLimit: e, localTimer: e})
+    this.changeTime(e);
 
   }
     
