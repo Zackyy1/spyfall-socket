@@ -80,6 +80,11 @@ export class Lobby extends Component {
             })
         }
 
+        if ($("#"+this.state.name)) {
+            console.log("Found my player label")
+            document.getElementById(this.state.name).style.textDecoration = "underline"
+        }
+
     }
 
     clickAction = (e) => {
@@ -352,6 +357,19 @@ export class Lobby extends Component {
     this.changeTime(e);
 
   }
+
+  setLang = e => {
+    if (e.target.id === 'ru') {
+      this.setState({language: "Russian"})
+      localStorage.setItem('lang', "Russian");
+
+
+    } else if (e.target.id === 'en') {
+      this.setState({language: "English"})
+      localStorage.setItem('lang', "English");
+
+    }
+  }
     
 
 
@@ -373,6 +391,18 @@ export class Lobby extends Component {
 
             </div>
             <button style={{marginTop: "15vh"}} className="btn btn-large button" id="readyButton" onClick={() => this.handleReady()}>{this.dict("ready")}</button>
+           
+           
+            <div className="dropdown" style={{marginTop: "50px"}}>
+        <button className="btn button dropdown-toggle big-text" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {this.dict("language")}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <p className="dropdown-item big-text" id="ru" onClick={(e) => this.setLang(e)}>{this.dict("russian")}</p>
+            <p className="dropdown-item big-text" id="en" onClick={(e) => this.setLang(e)}>{this.dict("english")}</p>
+        </div>
+    </div>
+
         </div>
       </div>
                 
@@ -396,7 +426,7 @@ export class Lobby extends Component {
              
       
               <div className="divider container"></div>
-              <div>
+                    <div>
                       {this.hostButton()}
                   </div>
       
@@ -404,8 +434,20 @@ export class Lobby extends Component {
                   <div className="location-list container">
                       {this.showLocations()}
                   </div>
+                  <div className="divider container"></div>
+
+                  <div className="dropdown" style={{margin: "50px"}}>
+        <button className="btn button dropdown-toggle big-text" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {this.dict("language")}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <p className="dropdown-item big-text" id="ru" onClick={(e) => this.setLang(e)}>{this.dict("russian")}</p>
+            <p className="dropdown-item big-text" id="en" onClick={(e) => this.setLang(e)}>{this.dict("english")}</p>
+        </div>
+    </div>
       
             </div>
+
           )
     } else {
         return <Loader /> 

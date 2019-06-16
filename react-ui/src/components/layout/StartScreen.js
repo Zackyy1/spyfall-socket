@@ -22,6 +22,10 @@ export class StartScreen extends Component {
   }
 
   componentDidMount() {
+    var tst = localStorage.getItem("lang") || "English";
+    console.log(tst)
+    this.setState({language: tst})
+
     socket.on("roomFound", () => {
       this.props.history.push({
         pathname: "/room/"+this.state.roomCode,
@@ -112,20 +116,26 @@ export class StartScreen extends Component {
     
   }
 
-  langRus = e => {
-    this.setState({language: "Russian"})
-    // console.log("CHANGED TO RUSSIAN");
-  }
-  langEng = e => {
-    this.setState({language: "English"})
-    // console.log("CHANGED TO ENGLISH");
+ 
+
+  setLang = e => {
+    if (e.target.id === 'ru') {
+      this.setState({language: "Russian"})
+      localStorage.setItem('lang', "Russian");
+
+
+    } else if (e.target.id === 'en') {
+      this.setState({language: "English"})
+      localStorage.setItem('lang', "English");
+
+    }
   }
 
   dict(word) {
     let from = dict.russian // change to english at production
     if (this.state.language === "Russian") {
       from = dict.russian;
-    } else {
+    } else if (this.state.language === "English") {
       from = dict.english;
     }
     return from[word];
@@ -172,8 +182,8 @@ export class StartScreen extends Component {
   {this.dict("language")}
   </button>
   <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <p className="dropdown-item big-text" onClick={() => this.langRus()}>{this.dict("russian")}</p>
-    <p className="dropdown-item big-text" onClick={() => this.langEng()}>{this.dict("english")}</p>
+    <p className="dropdown-item big-text" id="ru" onClick={(e) => this.setLang(e)}>{this.dict("russian")}</p>
+    <p className="dropdown-item big-text" id="en" onClick={(e) => this.setLang(e)}>{this.dict("english")}</p>
   </div>
 </div>
       </div>

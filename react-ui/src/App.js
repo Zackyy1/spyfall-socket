@@ -15,7 +15,8 @@ class App extends Component {
           <Switch >
               <Route path="/room/:roomCode" component={Lobby} />
               <Route exact path="/" component={StartScreen} />
-            </Switch>
+          </Switch>
+          
           </Router>
         
         
